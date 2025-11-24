@@ -65,5 +65,5 @@ MIT License – feel free to use and modify for educational or research purposes
 
 ## Author
 
-lucixsherry06
+github.com/lucixsherry06
 
