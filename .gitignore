@@ -51,6 +51,14 @@ coverage.xml
 .pytest_cache/
 cover/
 
+#Sample files
+*.Sample
+.arp_map.csv
+.dns_events.csv
+.icmp_events.csv
+.suspicious_ips.csv
+.syn_events.csv
+.portscan.csv
 # Translations
 *.mo
 *.pot
