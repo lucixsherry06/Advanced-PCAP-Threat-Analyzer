@@ -54,6 +54,8 @@ cover/
 # Whole Sample folder files
 Sample/
 
+# Whole Report folder files
+Report/
 # Report_CSV files
 .arp_map.csv
 .dns_events.csv

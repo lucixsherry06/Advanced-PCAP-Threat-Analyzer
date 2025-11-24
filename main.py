@@ -19,7 +19,7 @@ Usage:
 Dependencies:
   pip install scapy
 """
-
+import os
 import argparse
 import csv
 import time
@@ -48,6 +48,9 @@ BASE64_MIN_LEN = 16
 BASE64_MIN_RATIO = 0.65
 
 HTTP_KEYWORDS = ["password","login","admin","cmd","token","flag","secret","pass","key"]
+
+REPORT_DIR = "report"
+os.makedirs(REPORT_DIR, exist_ok=True)
 
 # -----------------------------
 # Utility helpers
@@ -260,16 +263,16 @@ def main():
         icmp_events, icmp_csv = detect_icmp_flood(packets)
         suspect_events, suspect_csv = detect_suspicious_hosts(packets)
 
-        write_csv("arp_map.csv", ["ip","macs"], arp_rows)
-        write_csv("portscan.csv", ["time","src","dst","dstport"], portscan_csv)
-        write_csv("syn_events.csv", ["time","src","dst","dstport"], syn_csv)
-        write_csv("dns_events.csv", ["time","src","dst","qname","qtype"], dns_csv)
-        write_csv("icmp_events.csv", ["time","src","dst"], icmp_csv)
-        write_csv("suspicious_ips.csv", ["time","src","dst"], suspect_csv)
-
+        write_csv(os.path.join(REPORT_DIR,"arp_map.csv"), ["ip","macs"], arp_rows)
+        write_csv(os.path.join(REPORT_DIR,"portscan.csv"), ["time","src","dst","dstport"], portscan_csv)
+        write_csv(os.path.join(REPORT_DIR,"syn_events.csv"), ["time","src","dst","dstport"], syn_csv)
+        write_csv(os.path.join(REPORT_DIR,"dns_events.csv"), ["time","src","dst","qname","qtype"], dns_csv)
+        write_csv(os.path.join(REPORT_DIR,"icmp_events.csv"), ["time","src","dst"], icmp_csv)
+        write_csv(os.path.join(REPORT_DIR,"suspicious_ips.csv"), ["time","src","dst"], suspect_csv)
     # ---------------- Report Generation ----------------
     now = timestamp_str(time.time())
-    with open(args.out,"w",encoding='utf-8') as rpt:
+    report_path=os.path.join(REPORT_DIR,args.out)
+    with open(report_path,"w",encoding='utf-8') as rpt:
         rpt.write(f"Advanced PCAP Threat Analyzer Report\nGenerated: {now}\nSource PCAP: {args.pcap}\n\n")
 
         # Core
@@ -343,7 +346,7 @@ def main():
             for proto,pct in dist.items(): rpt.write(f" - {proto}: {pct}\n")
             rpt.write("\n")
 
-    print(f"[+] Report written to {args.out}")
+    print(f"[+] Report written to {report_path}")
     print("[+] Done.")
 
 if __name__ == "__main__":
